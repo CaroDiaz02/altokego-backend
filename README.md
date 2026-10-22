@@ -7,9 +7,9 @@ Proyecto de la materia Programación II.
 
 > Completar con nombre y apellido de **todos** los integrantes del equipo.
 
-- Integrante 1
-- Integrante 2
-- Integrante 3
+- Integrante Carolina Diaz
+- Integrante Maria de los Angeles Torres
+- Integrante Eliana Carrizo
 
 ## Tecnologías
 

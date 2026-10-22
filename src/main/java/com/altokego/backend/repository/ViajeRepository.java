@@ -7,5 +7,8 @@ import java.util.List;
 
 @Repository
 public interface ViajeRepository extends JpaRepository<Viaje, Long> {
+
     List<Viaje> findByPasajeroId(Long pasajeroId);
+
+    boolean existsByPasajeroId(Long pasajeroId);
 }

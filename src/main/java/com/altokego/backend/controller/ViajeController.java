@@ -4,7 +4,6 @@ import com.altokego.backend.dto.ViajeRequestDTO;
 import com.altokego.backend.dto.ViajeResponseDTO;
 import com.altokego.backend.service.ViajeService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,27 +14,47 @@ import java.util.List;
 @RequestMapping("/api/viajes")
 public class ViajeController {
 
-    @Autowired
-    private ViajeService viajeService;
+    private final ViajeService viajeService;
 
-    // Endpoint POST para crear un viaje
+    public ViajeController(ViajeService viajeService) {
+        this.viajeService = viajeService;
+    }
+
+    // POST: crear un viaje
     @PostMapping
     public ResponseEntity<ViajeResponseDTO> crearViaje(@Valid @RequestBody ViajeRequestDTO request) {
-        ViajeResponseDTO nuevoViaje = viajeService.crearViaje(request);
-        return new ResponseEntity<>(nuevoViaje, HttpStatus.CREATED);
+        return new ResponseEntity<>(viajeService.crearViaje(request), HttpStatus.CREATED);
     }
 
-    // Endpoint GET para listar todos los viajes
+    // GET: listar todos los viajes
     @GetMapping
     public ResponseEntity<List<ViajeResponseDTO>> listarViajes() {
-        List<ViajeResponseDTO> viajes = viajeService.obtenerTodosLosViajes();
-        return ResponseEntity.ok(viajes);
+        return ResponseEntity.ok(viajeService.obtenerTodosLosViajes());
     }
 
-    // Endpoint GET para listar viajes por ID de pasajero (Relación JPA)
+    // GET: obtener un viaje por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<ViajeResponseDTO> obtenerViaje(@PathVariable Long id) {
+        return ResponseEntity.ok(viajeService.obtenerViajePorId(id));
+    }
+
+    // GET: listar viajes por ID de pasajero (relación JPA)
     @GetMapping("/pasajero/{pasajeroId}")
     public ResponseEntity<List<ViajeResponseDTO>> obtenerViajesPorPasajero(@PathVariable Long pasajeroId) {
-        List<ViajeResponseDTO> viajes = viajeService.obtenerViajesPorPasajero(pasajeroId);
-        return ResponseEntity.ok(viajes);
+        return ResponseEntity.ok(viajeService.obtenerViajesPorPasajero(pasajeroId));
+    }
+
+    // PUT: actualizar un viaje
+    @PutMapping("/{id}")
+    public ResponseEntity<ViajeResponseDTO> actualizarViaje(@PathVariable Long id,
+                                                            @Valid @RequestBody ViajeRequestDTO request) {
+        return ResponseEntity.ok(viajeService.actualizarViaje(id, request));
+    }
+
+    // DELETE: eliminar un viaje
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarViaje(@PathVariable Long id) {
+        viajeService.eliminarViaje(id);
+        return ResponseEntity.noContent().build();
     }
 }

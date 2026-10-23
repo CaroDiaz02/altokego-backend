@@ -1,6 +1,7 @@
 package com.altokego.backend.entity;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,8 +21,10 @@ public class Pasajero {
     @Column(nullable = false)
     private String telefono;
 
-    @OneToMany(mappedBy = "pasajero", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Viaje> viajes;
+    // Sin cascade ni orphanRemoval: borrar un pasajero NO debe borrar sus viajes.
+    // El service impide eliminar un pasajero que todavía tiene viajes.
+    @OneToMany(mappedBy = "pasajero")
+    private List<Viaje> viajes = new ArrayList<>();
 
     // Getters y Setters
     public Long getId() { return id; }
